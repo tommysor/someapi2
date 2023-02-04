@@ -4,12 +4,18 @@ namespace someapi2.Tests.Systems;
 
 public class BasicTests
 {
-    [Fact]
-    public async Task GetTodos()
+    private readonly HttpClient _httpClient;
+
+    public BasicTests()
     {
         var factory = new WebApplicationFactory<someapi2.IAssemblyMarker>();
-        var client = factory.CreateClient();
-        var response = await client.GetAsync("/todos");
+        _httpClient = factory.CreateClient();
+    }
+
+    [Fact]
+    public async Task GetTodosResponds()
+    {
+        var response = await _httpClient.GetAsync("/todos");
         response.EnsureSuccessStatusCode();
     }
 }
