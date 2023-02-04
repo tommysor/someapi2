@@ -14,6 +14,9 @@
 			"protocol": "https"
 		}
 	},
+	"forwardPorts": [
+		5000
+	],
 
 	"postCreateCommand": "bash ./.devcontainer/postCreateCommands.sh",
 
