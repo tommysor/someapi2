@@ -79,6 +79,8 @@ app.Map("/", (HttpContext httpContext) =>
 })
     .WithTags("Home")
     .RequireRateLimiting("fixed")
+    .RequireAuthorization()
+    .AllowAnonymous()
     ;
 
 app.Run();
