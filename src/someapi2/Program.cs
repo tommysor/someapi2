@@ -38,6 +38,8 @@ builder.Services.AddRateLimiter(options =>
     });
 });
 
+//todo Authentication and Authorization
+
 builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();
