@@ -64,7 +64,7 @@ jobs:
       uses: zaproxy/action-api-scan@v0.2.0
       with:
         target: 'https://someapi2/swagger/v1/swagger.json'
-        docker_name: 'owasp/zap2docker-stable'
+        docker_name: 'owasp/zap2docker-bare'
         format: openapi
         allow_issue_writing: false
         fail_action: true
