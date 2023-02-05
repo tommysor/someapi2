@@ -14,4 +14,15 @@ public sealed class TodosController
         return Array.Empty<Todo>();
     }
 
+    [HttpGet("{id}")]
+    public async Task<ActionResult<Todo>> Get([FromRoute] Guid id)
+    {
+        if (id == Guid.Empty)
+        {
+            return new BadRequestResult();
+        }
+        
+        await Task.CompletedTask;
+        return new Todo();
+    }
 }
