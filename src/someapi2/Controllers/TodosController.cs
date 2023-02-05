@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace someapi2.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("Todos")]
 [Produces("application/json")]
 public sealed class TodosController
 {
