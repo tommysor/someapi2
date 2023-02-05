@@ -25,7 +25,8 @@
 			"extensions": [
 				"ms-dotnettools.csharp",
 				"GitHub.copilot",
-				"cschleiden.vscode-github-actions"
+				"cschleiden.vscode-github-actions",
+				"humao.rest-client"
 			]
 		}
 	}
