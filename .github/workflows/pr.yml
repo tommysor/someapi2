@@ -68,3 +68,20 @@ jobs:
         format: openapi
         allow_issue_writing: false
         fail_action: true
+
+  snykDocker:
+    runs-on: ubuntu-22.04
+    
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        fetch-depth: 1
+    - name: Build a Docker image
+      run: docker build --tag someapi2:snykdocker ./src/someapi2/
+    
+    - name: Run Snyk to check Docker image for vulnerabilities
+      uses: snyk/actions/docker@e25b2e6f5658d1bb7a6671b113260f13134cc3af
+      env:
+        SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+      with:
+        image: someapi2:snykdocker
