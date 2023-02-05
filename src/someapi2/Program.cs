@@ -1,3 +1,5 @@
+using System.Text.Json;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
@@ -7,17 +9,33 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
+app.UseHsts();
+
+app.Use(async (context, next) =>
+{
+    context.Response.Headers.Add("X-Content-Type-Options", "nosniff");
+    await next();
+});
+
 app.UseSwagger();
-app.UseSwaggerUI();
+
+if (app.Environment.IsDevelopment())
+{
+    app.UseDeveloperExceptionPage();
+    app.UseSwaggerUI();
+}
 
 app.UseAuthorization();
 
 app.MapControllers();
 
-app.Map("/", context => 
+app.Map("/", (HttpContext httpContext) => 
 {
-    context.Response.Redirect("/swagger");
-    return Task.CompletedTask;
-});
+    var body = new { message = "Hello World!" };
+    httpContext.Response.ContentType = "application/json; charset=utf-8";
+    httpContext.Response.BodyWriter.WriteAsync(JsonSerializer.SerializeToUtf8Bytes(body));
+})
+    .WithTags("Home")
+    ;
 
 app.Run();
