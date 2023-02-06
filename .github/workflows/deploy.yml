@@ -70,10 +70,11 @@ jobs:
       env:
         containerImage: ghcr.io/${{ github.repository }}/app:${{ github.sha }}
         revisionSuffix: ${{ github.sha }}
+        location: 'norwayeast'
       with:
         scope: resourcegroup
         resourceGroupName: ${{ secrets.AZURE_RESOURCE_GROUP }}
         template: ./build/main.bicep
         deploymentMode: Complete
         deploymentName: app-${{ github.sha }}
-        parameters: 'containerImage=${{ env.containerImage }} revisionSuffix=${{ env.revisionSuffix }}'
+        parameters: 'location=${{ env.location }} containerImage=${{ env.containerImage }} revisionSuffix=${{ env.revisionSuffix }}'
