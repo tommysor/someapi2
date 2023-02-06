@@ -39,7 +39,7 @@ jobs:
     
     - name: Build image
       env:
-        image_tag_app: ghcr.io/${{ env.GITHUB_REPOSITORY }}/app:${{ github.sha }}
+        image_tag_app: ghcr.io/${{ github.repository }}/app:${{ github.sha }}
       run: |
         echo image_tag: ${{ env.image_tag_app }}
         docker build --tag ${{ env.image_tag_app }} ./src/someapi2/
@@ -68,7 +68,7 @@ jobs:
     - name: Deploy app
       uses: azure/arm-deploy@v1
       env:
-        containerImage: ghcr.io/${{ env.GITHUB_REPOSITORY }}/app:${{ github.sha }}
+        containerImage: ghcr.io/${{ github.repository }}/app:${{ github.sha }}
         revisionSuffix: ${{ github.sha }}
       with:
         scope: resourcegroup
