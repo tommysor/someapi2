@@ -14,8 +14,9 @@ permissions:
   deployments: none
 
 jobs:
-  buildAndTest:
+  build-test:
     runs-on: ubuntu-22.04
+    timeout-minutes: 10
 
     steps:
     - uses: actions/checkout@v3
@@ -32,8 +33,9 @@ jobs:
     - name: Test
       run: dotnet test --no-build --verbosity normal
 
-  owaspZap:
+  owasp-zap:
     runs-on: ubuntu-22.04
+    timeout-minutes: 10
 
     steps:
     - uses: actions/checkout@v3
@@ -69,8 +71,9 @@ jobs:
         allow_issue_writing: false
         fail_action: true
 
-  snykDocker:
+  snyk-docker:
     runs-on: ubuntu-22.04
+    timeout-minutes: 10
     
     steps:
     - uses: actions/checkout@v3
@@ -85,3 +88,25 @@ jobs:
         SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
       with:
         image: someapi2:snykdocker
+
+  snyk-iac:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 10
+
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        fetch-depth: 1
+    
+    - name: bicep-build-output
+      uses: Azure/bicep-build-action@v1.0.1
+      with:
+        bicepFilePath: ./build/main.bicep
+        outputFilePath: ./build/main.json
+
+    - name: Run Snyk to check configuration files for security issues
+      uses: snyk/actions/iac@14818c4695ecc4045f33c9cee9e795a788711ca4
+      env:
+        SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+      with:
+        file: ./build/main.json
