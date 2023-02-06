@@ -39,7 +39,16 @@ jobs:
       run: |
         echo image_tag: ${{ env.image_tag_app }}
         docker build --tag ${{ env.image_tag_app }} ./src/someapi2/
-        docker push ${{ env.image_tag_app }}
+
+    - name: Run Snyk to check Docker image for vulnerabilities
+      uses: snyk/actions/docker@e25b2e6f5658d1bb7a6671b113260f13134cc3af
+      env:
+        SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+      with:
+        image: ${{ env.image_tag_app }}
+
+    - name: Docker push
+      run: docker push ${{ env.image_tag_app }}
 
     - name: Log in to Azure
       uses: azure/login@v1
@@ -47,6 +56,19 @@ jobs:
         client-id: ${{ Secrets.AZURE_CLIENT_ID }}
         tenant-id: ${{ Secrets.AZURE_TENANT_ID }}
         subscription-id: ${{ Secrets.AZURE_SUBSCRIPTION_ID }}
+
+    - name: bicep-build-output
+      uses: Azure/bicep-build-action@v1.0.1
+      with:
+        bicepFilePath: ./build/main.bicep
+        outputFilePath: ./build/main.json
+
+    - name: Run Snyk to check configuration files for security issues
+      uses: snyk/actions/iac@14818c4695ecc4045f33c9cee9e795a788711ca4
+      env:
+        SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+      with:
+        file: ./build/main.json
 
     - name: Deploy app
       uses: azure/arm-deploy@v1
