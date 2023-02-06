@@ -1,0 +1,72 @@
+name: deploy
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+concurrency:
+  group: "${{ github.workflow }}-${{ github.ref }}"
+  cancel-in-progress: true
+
+permissions:
+  deployments: none
+
+jobs:
+  build-app:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 10
+    permissions:
+      packages: write
+
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        fetch-depth: 1
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 7.0.x
+
+    - name: Log in to GitHub container registry
+      uses: docker/login-action@v2
+      with:
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${{ github.token }}
+    
+    - name: Build image
+      env:
+        image_tag_app: ghcr.io/${{ env.GITHUB_REPOSITORY }}/app:${{ github.sha }}
+      run: |
+        echo image_tag: ${{ env.image_tag_app }}
+        docker build --tag ${{ env.image_tag_app }} ./src/someapi2/
+        docker push ${{ env.image_tag_app }}
+
+  deploy-app:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 10
+    needs: build-app
+    permissions:
+      id-token: write
+    
+    steps:
+    - name: Log in to Azure
+      uses: azure/login@v1
+      with:
+        client-id: ${{ Secrets.AZURE_CLIENT_ID }}
+        tenant-id: ${{ Secrets.AZURE_TENANT_ID }}
+        subscription-id: ${{ Secrets.AZURE_SUBSCRIPTION_ID }}
+
+    - name: Deploy app
+      uses: azure/arm-deploy@v1
+      env:
+        containerImage: ghcr.io/${{ env.GITHUB_REPOSITORY }}/app:${{ github.sha }}
+        revisionSuffix: ${{ github.sha }}
+      with:
+        scope: resourcegroup
+        resourceGroupName: ${{ secrets.AZURE_RESOURCE_GROUP }}
+        template: ./build/main.bicep
+        deploymentMode: Complete
+        deploymentName: app-${{ github.sha }}
+        parameters: 'containerImage=${{ env.containerImage }} revisionSuffix=${{ env.revisionSuffix }}'

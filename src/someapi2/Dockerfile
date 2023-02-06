@@ -9,5 +9,5 @@ RUN dotnet publish "someapi2.csproj" -c Release -o /app/publish
 FROM mcr.microsoft.com/dotnet/aspnet:7.0-alpine AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-EXPOSE 443
+EXPOSE 80 443
 ENTRYPOINT ["dotnet", "someapi2.dll"]
