@@ -6,8 +6,8 @@ RUN dotnet build "someapi2.csproj" -c Release -o /app/build
 FROM build AS publish
 RUN dotnet publish "someapi2.csproj" -c Release -o /app/publish
 
-FROM mcr.microsoft.com/dotnet/aspnet:7.0-alpine AS final
+FROM mcr.microsoft.com/dotnet/nightly/aspnet:7.0-jammy-chiseled AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-EXPOSE 443
+EXPOSE 8443
 ENTRYPOINT ["dotnet", "someapi2.dll"]
