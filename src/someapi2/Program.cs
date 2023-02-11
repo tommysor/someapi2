@@ -1,5 +1,7 @@
 using System.Text.Json;
 using System.Threading.RateLimiting;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -38,7 +40,23 @@ builder.Services.AddRateLimiter(options =>
     });
 });
 
-//todo Authentication and Authorization
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.Authority = "https://localhost:5001";
+        options.Audience = "someapi2";
+    });
+
+builder.Services.AddAuthorization(options =>
+{
+    var policy = new AuthorizationPolicyBuilder()
+        .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
+        .RequireAuthenticatedUser()
+        .Build();
+
+    options.DefaultPolicy = policy;
+    options.FallbackPolicy = policy;
+});
 
 builder.Services.AddControllers();
 
@@ -65,10 +83,12 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers()
     .RequireRateLimiting("fixed")
+    .RequireAuthorization()
     ;
 
 app.Map("/", (HttpContext httpContext) => 
