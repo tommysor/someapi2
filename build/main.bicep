@@ -30,7 +30,7 @@ resource applicationInsights 'Microsoft.Insights/components@2020-02-02' = {
   }
 }
 
-resource containerAppEnv 'Microsoft.App/managedEnvironments@2022-06-01-preview' = {
+resource containerAppEnv 'Microsoft.App/managedEnvironments@2022-10-01' = {
   name: 'appEnv-${rgUniqueString}'
   location: location
   sku: {
@@ -55,7 +55,7 @@ var environmentVariables = [
   }
 ]
 
-resource containerApp 'Microsoft.App/containerApps@2022-06-01-preview' = {
+resource containerApp 'Microsoft.App/containerApps@2022-10-01' = {
   name: appName
   location: location
   identity: {
