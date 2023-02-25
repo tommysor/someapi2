@@ -53,7 +53,7 @@ jobs:
     - name: run api
       run: |
         dotnet dev-certs https -ep ${HOME}/.aspnet/https/aspnetapp.pfx -p stupidPassword
-        docker run --rm --pull never --publish 443:443 -e ASPNETCORE_URLS="https://+" -e ASPNETCORE_Kestrel__Certificates__Default__Password="stupidPassword" -e ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx -v ${HOME}/.aspnet/https:/https/ someapi2:owaspzap &
+        docker run --rm --pull never --publish 443:8443 -e ASPNETCORE_URLS="https://+" -e ASPNETCORE_Kestrel__Certificates__Default__Password="stupidPassword" -e ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx -v ${HOME}/.aspnet/https:/https/ someapi2:owaspzap &
         sleep 5
 
     - name: Add hostname
