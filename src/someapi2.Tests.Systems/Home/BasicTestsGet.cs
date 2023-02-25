@@ -8,7 +8,7 @@ public sealed class BasicTestsGet
 
     public BasicTestsGet()
     {
-        _httpClient = TestWebApplicationFactory.CreateClient();
+        _httpClient = TestWebApplicationFactory.CreateClientAnonymous();
     }
 
     [Fact]

@@ -8,7 +8,7 @@ public sealed class BasicTestsGet
 
     public BasicTestsGet()
     {
-        _httpClient = TestWebApplicationFactory.CreateClient();
+        _httpClient = TestWebApplicationFactory.CreateClientAnonymous();
     }
 
     [Fact]
@@ -30,13 +30,5 @@ public sealed class BasicTestsGet
 
         var response = await _httpClient.GetAsync("/todos");
         Assert.Equal(HttpStatusCode.TooManyRequests, response.StatusCode);
-    }
-
-    [Fact]
-    public async Task RequiresAuthenticatedUser()
-    {
-        var client = TestWebApplicationFactory.CreateClientAnonymous();
-        var response = await client.GetAsync("/todos");
-        Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
     }
 }

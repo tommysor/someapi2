@@ -8,7 +8,7 @@ public sealed class BasicTestsGetById
 
     public BasicTestsGetById()
     {
-        _httpClient = TestWebApplicationFactory.CreateClient();
+        _httpClient = TestWebApplicationFactory.CreateClientAnonymous();
     }
 
     [Fact]
