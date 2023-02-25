@@ -40,24 +40,6 @@ builder.Services.AddRateLimiter(options =>
     });
 });
 
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
-    {
-        options.Authority = "https://localhost:5001";
-        options.Audience = "someapi2";
-    });
-
-builder.Services.AddAuthorization(options =>
-{
-    var policy = new AuthorizationPolicyBuilder()
-        .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
-        .RequireAuthenticatedUser()
-        .Build();
-
-    options.DefaultPolicy = policy;
-    options.FallbackPolicy = policy;
-});
-
 builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();
@@ -83,12 +65,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseAuthentication();
-app.UseAuthorization();
-
 app.MapControllers()
     .RequireRateLimiting("fixed")
-    .RequireAuthorization()
     ;
 
 app.Map("/", (HttpContext httpContext) => 
@@ -99,8 +77,6 @@ app.Map("/", (HttpContext httpContext) =>
 })
     .WithTags("Home")
     .RequireRateLimiting("fixed")
-    .RequireAuthorization()
-    .AllowAnonymous()
     ;
 
 app.Run();
