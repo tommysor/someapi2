@@ -12,5 +12,5 @@ FROM mcr.microsoft.com/dotnet/aspnet:7.0-alpine AS final
 #USER 1001:1001
 WORKDIR /app
 COPY --from=publish /app/publish .
-EXPOSE 80 443
+EXPOSE 8080 8443
 ENTRYPOINT ["dotnet", "someapi2.dll"]
