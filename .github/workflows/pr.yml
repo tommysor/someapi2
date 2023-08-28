@@ -63,7 +63,7 @@ jobs:
         sudo echo "127.0.0.1 someapi2" | sudo tee -a /etc/hosts
 
     - name: OWASP ZAP API Scan
-      uses: zaproxy/action-api-scan@v0.2.0
+      uses: zaproxy/action-api-scan@v0.5.0
       with:
         target: 'http://someapi2/swagger/v1/swagger.json'
         docker_name: 'owasp/zap2docker-stable'
