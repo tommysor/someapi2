@@ -24,7 +24,7 @@ jobs:
       image_tag_app: ghcr.io/${{ github.repository }}/app:${{ github.sha }}
     
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
       with:
         fetch-depth: 1
 

@@ -19,7 +19,7 @@ jobs:
     timeout-minutes: 10
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
       with:
         fetch-depth: 1
     - name: Setup .NET
@@ -38,7 +38,7 @@ jobs:
     timeout-minutes: 10
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
       with:
         fetch-depth: 1
     - name: Setup .NET
@@ -76,7 +76,7 @@ jobs:
     timeout-minutes: 10
     
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
       with:
         fetch-depth: 1
     - name: Build a Docker image
@@ -94,7 +94,7 @@ jobs:
     timeout-minutes: 10
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
       with:
         fetch-depth: 1
     
