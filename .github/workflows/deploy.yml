@@ -41,7 +41,7 @@ jobs:
         docker build --tag ${{ env.image_tag_app }} ./src/someapi2/
 
     - name: Run Snyk to check Docker image for vulnerabilities
-      uses: snyk/actions/docker@39091e69b560da335383b404e50d65b408f4f812
+      uses: snyk/actions/docker@3e2680e8df93a24b52d119b1305fb7cedc60ceae
       env:
         SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
       with:
@@ -64,7 +64,7 @@ jobs:
         outputFilePath: ./build/main.json
 
     - name: Run Snyk to check configuration files for security issues
-      uses: snyk/actions/iac@39091e69b560da335383b404e50d65b408f4f812
+      uses: snyk/actions/iac@3e2680e8df93a24b52d119b1305fb7cedc60ceae
       env:
         SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
       with:
